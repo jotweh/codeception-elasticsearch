@@ -79,7 +79,7 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function seeItemExistsInElasticsearchShouldPassIdToClient()
+    public function seeItemExistsInElasticsearchShouldCallExistsWithIdOnClient()
     {
         $module = new ElasticSearch($this->container, ['hosts' => []], $this->client);
         $module->seeItemExistsInElasticsearch(null, null, 'document-id');
