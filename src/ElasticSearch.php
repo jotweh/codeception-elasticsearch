@@ -18,9 +18,8 @@ class ElasticSearch extends Module
 
     public function __construct(ModuleContainer $moduleContainer, $config = null, Client $client = null)
     {
-        $this->config = $config;
-        $this->guardThatConfigurationHasHosts();
-        $this->wrapConfiguredHostsInArrayIfNeeded();
+        $this->setModuleConfiguration($config);
+        $this->sanitizeModuleConfiguration();
         $this->setElasticSearchClientIfInjected($client);
 
         parent::__construct($moduleContainer);
@@ -106,5 +105,19 @@ class ElasticSearch extends Module
         if (!is_array($this->config['hosts'])) {
             $this->config['hosts'] = array($this->config['hosts']);
         }
+    }
+
+    /**
+     * @param $config
+     */
+    private function setModuleConfiguration($config)
+    {
+        $this->config = $config;
+    }
+
+    private function sanitizeModuleConfiguration()
+    {
+        $this->guardThatConfigurationHasHosts();
+        $this->wrapConfiguredHostsInArrayIfNeeded();
     }
 }
