@@ -150,4 +150,9 @@ class ElasticSearch extends Module
     {
         return $this->config['hosts'];
     }
+
+    public function createIndexInElasticsearch($indexName)
+    {
+        $this->elasticSearch->indices()->create(['index' => $indexName]);
+    }
 }
