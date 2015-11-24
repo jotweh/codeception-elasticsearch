@@ -115,9 +115,11 @@ class ElasticSearch extends Module
             ]
         );
 
-        return $this->isEmptyResult($result)
-            ? $result['hits']['hits'][0]['_source']
-            : array();
+        if ($this->isEmptyResult($result)) {
+            return array();
+        }
+
+        return $result['hits']['hits'][0]['_source'];
     }
 
     public function getHosts()
@@ -131,6 +133,6 @@ class ElasticSearch extends Module
      */
     private function isEmptyResult($result)
     {
-        return !empty($result['hits']['hits']);
+        return empty($result['hits']['hits']);
     }
 }
