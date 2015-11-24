@@ -25,6 +25,44 @@ class ElasticSearch extends Module
         parent::__construct($moduleContainer);
     }
 
+    /**
+     * @param $config
+     */
+    private function setModuleConfiguration($config)
+    {
+        $this->config = $config;
+    }
+
+    private function sanitizeModuleConfiguration()
+    {
+        $this->guardThatConfigurationHasHosts();
+        $this->wrapConfiguredHostsInArrayIfNeeded();
+    }
+
+    private function guardThatConfigurationHasHosts()
+    {
+        if (!isset($this->config['hosts'])) {
+            throw new \Exception('please configure hosts for ElasticSearch codeception module');
+        }
+    }
+
+    private function wrapConfiguredHostsInArrayIfNeeded()
+    {
+        if (!is_array($this->config['hosts'])) {
+            $this->config['hosts'] = array($this->config['hosts']);
+        }
+    }
+
+    /**
+     * @param Client $client
+     */
+    private function setElasticSearchClientIfInjected($client)
+    {
+        if (!is_null($client)) {
+            $this->elasticSearch = $client;
+        }
+    }
+
     public function _initialize()
     {
         if (is_null($this->elasticSearch)) {
@@ -51,7 +89,6 @@ class ElasticSearch extends Module
             ]
         );
     }
-
 
     /**
      * grab an item from search index
@@ -81,43 +118,5 @@ class ElasticSearch extends Module
     public function getHosts()
     {
         return $this->config['hosts'];
-    }
-
-    /**
-     * @param Client $client
-     */
-    private function setElasticSearchClientIfInjected($client)
-    {
-        if (!is_null($client)) {
-            $this->elasticSearch = $client;
-        }
-    }
-
-    private function guardThatConfigurationHasHosts()
-    {
-        if (!isset($this->config['hosts'])) {
-            throw new \Exception('please configure hosts for ElasticSearch codeception module');
-        }
-    }
-
-    private function wrapConfiguredHostsInArrayIfNeeded()
-    {
-        if (!is_array($this->config['hosts'])) {
-            $this->config['hosts'] = array($this->config['hosts']);
-        }
-    }
-
-    /**
-     * @param $config
-     */
-    private function setModuleConfiguration($config)
-    {
-        $this->config = $config;
-    }
-
-    private function sanitizeModuleConfiguration()
-    {
-        $this->guardThatConfigurationHasHosts();
-        $this->wrapConfiguredHostsInArrayIfNeeded();
     }
 }
