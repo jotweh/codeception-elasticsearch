@@ -22,7 +22,6 @@ class ElasticSearchIndexManagementTest extends ElasticSearchTestCase
      */
     public function createIndexInElasticsearchShouldCallIndicesCreateOnClientWithIndexName()
     {
-        $this->client->shouldReceive('indices')->andReturn($this->indicesNamespace);
         $this->module->createIndexInElasticsearch('index-name');
         $this->indicesNamespace->shouldHaveReceived('create')->with(m::subset(['index' => 'index-name']));
     }
@@ -33,5 +32,6 @@ class ElasticSearchIndexManagementTest extends ElasticSearchTestCase
 
         $this->indicesNamespace = m::mock('\Elasticsearch\Namespaces\IndicesNamespace');
         $this->indicesNamespace->shouldIgnoreMissing();
+        $this->client->shouldReceive('indices')->andReturn($this->indicesNamespace)->byDefault();
     }
 }
