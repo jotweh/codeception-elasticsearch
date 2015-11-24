@@ -65,11 +65,6 @@ class ElasticSearch extends Module
 
     public function _initialize()
     {
-        $this->buildElasticSearchClientIfNotInjected();
-    }
-
-    private function buildElasticSearchClientIfNotInjected()
-    {
         if (is_null($this->elasticSearch)) {
             $this->elasticSearch = new Client($this->config);
         }
