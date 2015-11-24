@@ -17,6 +17,10 @@ use Codeception\Module\ElasticSearch;
 class ElasticSearchTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var Client | m\Mock
+     */
+    private $client;
+    /**
      * @var ModuleContainer | m\Mock
      */
     private $container;
@@ -57,19 +61,18 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
      */
     public function seeItemExistsInElasticsearchShouldPassIndexNameToClient()
     {
-        $client = m::mock('\Elasticsearch\Client');
-        $client->shouldIgnoreMissing();
-
-        $module = new ElasticSearch($this->container, ['hosts' => []], $client);
+        $module = new ElasticSearch($this->container, ['hosts' => []], $this->client);
         $module->_initialize();
         $module->seeItemExistsInElasticsearch('index-name', null, null);
 
-        $client->shouldHaveReceived('exists')->with(m::subset(['index' => 'index-name']))->once();
+        $this->client->shouldHaveReceived('exists')->with(m::subset(['index' => 'index-name']))->once();
     }
 
     public function setUp()
     {
         $this->container = m::mock('\Codeception\Lib\ModuleContainer');
+        $this->client = m::mock('\Elasticsearch\Client');
+        $this->client->shouldIgnoreMissing();
     }
 
     public function tearDown()
