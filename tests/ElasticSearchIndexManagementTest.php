@@ -26,6 +26,15 @@ class ElasticSearchIndexManagementTest extends ElasticSearchTestCase
         $this->indicesNamespace->shouldHaveReceived('create')->with(m::subset(['index' => 'index-name']));
     }
 
+    /**
+     * @test
+     */
+    public function deleteIndexInElasticsearchShouldCallDeleteOnClientIndicesWithIndexName()
+    {
+        $this->module->deleteIndexInElasticsearch('index-name');
+        $this->indicesNamespace->shouldHaveReceived('delete')->with(m::subset(['index' => 'index-name']));
+    }
+
     public function setUp()
     {
         parent::setUp();

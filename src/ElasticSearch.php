@@ -155,4 +155,9 @@ class ElasticSearch extends Module
     {
         $this->elasticSearch->indices()->create(['index' => $indexName]);
     }
+
+    public function deleteIndexInElasticsearch($indexName)
+    {
+        $this->elasticSearch->indices()->delete(['index' => $indexName]);
+    }
 }
