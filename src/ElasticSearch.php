@@ -65,7 +65,7 @@ class ElasticSearch extends Module
 
     public function _initialize()
     {
-        if (is_null($this->elasticSearch)) {
+        if ($this->doesNotHaveElasticSearchClient()) {
             $this->elasticSearch = new Client($this->config);
         }
     }
@@ -138,5 +138,13 @@ class ElasticSearch extends Module
     public function getHosts()
     {
         return $this->config['hosts'];
+    }
+
+    /**
+     * @return bool
+     */
+    private function doesNotHaveElasticSearchClient()
+    {
+        return is_null($this->elasticSearch);
     }
 }
