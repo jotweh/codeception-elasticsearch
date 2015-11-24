@@ -12,7 +12,7 @@ namespace Tests\Codeception\Module;
 use Elasticsearch\Namespaces\IndicesNamespace;
 use Mockery as m;
 
-class ElasticSearch_createIndexInElasticsearchTest extends ElasticSearchTestCase
+class ElasticSearchIndexManagementTest extends ElasticSearchTestCase
 {
     /** @var IndicesNamespace | m\Mock */
     private $indicesNamespace;
