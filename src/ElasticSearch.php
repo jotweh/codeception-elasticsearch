@@ -11,10 +11,12 @@ use Elasticsearch\Client;
 
 class ElasticSearch extends Module
 {
-    /** @var  \Elasticsearch\Client */
-    private $elasticSearch;
+    /**
+     * @var Client
+     */
+    private $elasticSearch = null;
 
-    public function __construct(ModuleContainer $moduleContainer, $config = null)
+    public function __construct(ModuleContainer $moduleContainer, $config = null, Client $client = null)
     {
         // terminology: see = isXyz => true/false, have = create, grab = get => data
 
@@ -27,18 +29,18 @@ class ElasticSearch extends Module
         }
         $this->config = (array)$config;
 
+        if (!is_null($client)) {
+            $this->elasticSearch = $client;
+        }
+
         parent::__construct($moduleContainer);
     }
 
     public function _initialize()
     {
-        /*
-         * elastic search config
-         * hosts - array of ES hosts
-         * dic - ES dictionary
-         */
-
-        $this->elasticSearch = new Client($this->config);
+        if (!is_null($this->$this->elasticSearch)) {
+            $this->elasticSearch = new Client($this->config);
+        }
     }
 
     /**
