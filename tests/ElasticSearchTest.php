@@ -17,6 +17,10 @@ use Codeception\Module\ElasticSearch;
 class ElasticSearchTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var ElasticSearch
+     */
+    private $module;
+    /**
      * @var Client | m\Mock
      */
     private $client;
@@ -61,8 +65,7 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
      */
     public function seeItemExistsInElasticsearchShouldCallExistsWithIndexNameOnClient()
     {
-        $module = new ElasticSearch($this->container, ['hosts' => []], $this->client);
-        $module->seeItemExistsInElasticsearch('index-name', null, null);
+        $this->module->seeItemExistsInElasticsearch('index-name', null, null);
         $this->client->shouldHaveReceived('exists')->with(m::subset(['index' => 'index-name']))->once();
     }
 
@@ -71,8 +74,7 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
      */
     public function seeItemExistsInElasticsearchShouldCallExistsWithTypeOnClient()
     {
-        $module = new ElasticSearch($this->container, ['hosts' => []], $this->client);
-        $module->seeItemExistsInElasticsearch(null, 'document-type', null);
+        $this->module->seeItemExistsInElasticsearch(null, 'document-type', null);
         $this->client->shouldHaveReceived('exists')->with(m::subset(['type' => 'document-type']))->once();
     }
 
@@ -81,16 +83,17 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
      */
     public function seeItemExistsInElasticsearchShouldCallExistsWithIdOnClient()
     {
-        $module = new ElasticSearch($this->container, ['hosts' => []], $this->client);
-        $module->seeItemExistsInElasticsearch(null, null, 'document-id');
+        $this->module->seeItemExistsInElasticsearch(null, null, 'document-id');
         $this->client->shouldHaveReceived('exists')->with(m::subset(['id' => 'document-id']))->once();
     }
 
     public function setUp()
     {
+        /** @var ModuleContainer container */
         $this->container = m::mock('\Codeception\Lib\ModuleContainer');
         $this->client = m::mock('\Elasticsearch\Client');
         $this->client->shouldIgnoreMissing();
+        $this->module = new ElasticSearch($this->container, ['hosts' => []], $this->client);
     }
 
     public function tearDown()
