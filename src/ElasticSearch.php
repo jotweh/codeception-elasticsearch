@@ -91,9 +91,7 @@ class ElasticSearch extends Module
         $this->config = $configArray;
         $this->guardThatConstructorConfigurationHasHosts();
 
-        if (!is_array($this->config['hosts'])) {
-            $this->config['hosts'] = array($this->config['hosts']);
-        }
+        $this->wrapConfiguredHostsInArrayIfNeeded();
     }
 
     /**
@@ -110,6 +108,13 @@ class ElasticSearch extends Module
     {
         if (!isset($this->config['hosts'])) {
             throw new \Exception('please configure hosts for ElasticSearch codeception module');
+        }
+    }
+
+    private function wrapConfiguredHostsInArrayIfNeeded()
+    {
+        if (!is_array($this->config['hosts'])) {
+            $this->config['hosts'] = array($this->config['hosts']);
         }
     }
 }
