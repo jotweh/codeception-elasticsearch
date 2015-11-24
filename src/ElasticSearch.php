@@ -90,7 +90,7 @@ class ElasticSearch extends Module
      *
      * @return array
      */
-    public function seeItemExistsInElasticsearch($index, $type, $id)
+    public function seeItemExistsInElasticSearch($index, $type, $id)
     {
         return $this->elasticSearch->exists(
             [
@@ -110,7 +110,7 @@ class ElasticSearch extends Module
      *
      * @return array
      */
-    public function grabAnItemFromElasticsearch($index = null, $type = null, $queryString = '*')
+    public function grabAnItemFromElasticSearch($index = null, $type = null, $queryString = '*')
     {
         $result = $this->elasticSearch->search(
             [
@@ -151,22 +151,22 @@ class ElasticSearch extends Module
         return $this->config['hosts'];
     }
 
-    public function createIndexInElasticsearch($indexName)
+    public function createIndexInElasticSearch($indexName)
     {
         $this->elasticSearch->indices()->create(['index' => $indexName]);
     }
 
-    public function deleteIndexInElasticsearch($indexName)
+    public function deleteIndexInElasticSearch($indexName)
     {
         $this->elasticSearch->indices()->delete(['index' => $indexName]);
     }
 
-    public function seeIndexExistsInElasticsearch($indexName)
+    public function seeIndexExistsInElasticSearch($indexName)
     {
         $this->assertTrue($this->elasticSearch->indices()->exists(['index' => $indexName]));
     }
 
-    public function dontSeeIndexExistsInElasticsearch($indexName)
+    public function dontSeeIndexExistsInElasticSearch($indexName)
     {
         $this->assertFalse($this->elasticSearch->indices()->exists(['index' => $indexName]));
     }

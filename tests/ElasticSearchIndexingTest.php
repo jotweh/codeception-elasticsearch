@@ -16,7 +16,7 @@ class ElasticSearchIndexingTest extends ElasticSearchTestCase
     /**
      * @test
      */
-    public function indexAnItemInElasticsearchShouldCallIndexOnClientWithIndexName()
+    public function indexAnItemInElasticSearchShouldCallIndexOnClientWithIndexName()
     {
         $this->module->indexAnItemInElasticSearch('index-name', null, null);
         $this->client->shouldHaveReceived('index')->with(m::subset(['index' => 'index-name']));
@@ -25,7 +25,7 @@ class ElasticSearchIndexingTest extends ElasticSearchTestCase
     /**
      * @test
      */
-    public function indexAnItemInElasticsearchShouldCallIndexOnClientWithType()
+    public function indexAnItemInElasticSearchShouldCallIndexOnClientWithType()
     {
         $this->module->indexAnItemInElasticSearch(null, 'document-type', null);
         $this->client->shouldHaveReceived('index')->with(m::subset(['type' => 'document-type']));
@@ -34,7 +34,7 @@ class ElasticSearchIndexingTest extends ElasticSearchTestCase
     /**
      * @test
      */
-    public function indexAnItemInElasticsearchShouldCallIndexOnClientWithIdIfSpecified()
+    public function indexAnItemInElasticSearchShouldCallIndexOnClientWithIdIfSpecified()
     {
         $this->module->indexAnItemInElasticSearch(null, null, null, 123);
         $this->client->shouldHaveReceived('index')->with(m::subset(['id' => 123]));
@@ -43,7 +43,7 @@ class ElasticSearchIndexingTest extends ElasticSearchTestCase
     /**
      * @test
      */
-    public function indexAnItemInElasticsearchShouldCallIndexOnClientWithoutIdIfNotSpecified()
+    public function indexAnItemInElasticSearchShouldCallIndexOnClientWithoutIdIfNotSpecified()
     {
         $this->module->indexAnItemInElasticSearch(null, null, null);
         $this->client->shouldHaveReceived('index')->with(m::on(function ($actual) {
@@ -54,7 +54,7 @@ class ElasticSearchIndexingTest extends ElasticSearchTestCase
     /**
      * @test
      */
-    public function indexAnItemInElasticsearchShouldCallIndexOnClientWithDocumentBody()
+    public function indexAnItemInElasticSearchShouldCallIndexOnClientWithDocumentBody()
     {
         $documentBody = [
             'apples' => 1,
