@@ -76,6 +76,16 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
         $this->client->shouldHaveReceived('exists')->with(m::subset(['type' => 'document-type']))->once();
     }
 
+    /**
+     * @test
+     */
+    public function seeItemExistsInElasticsearchShouldPassIdToClient()
+    {
+        $module = new ElasticSearch($this->container, ['hosts' => []], $this->client);
+        $module->seeItemExistsInElasticsearch(null, null, 'document-id');
+        $this->client->shouldHaveReceived('exists')->with(m::subset(['id' => 'document-id']))->once();
+    }
+
     public function setUp()
     {
         $this->container = m::mock('\Codeception\Lib\ModuleContainer');
