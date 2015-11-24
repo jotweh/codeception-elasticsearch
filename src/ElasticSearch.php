@@ -119,7 +119,7 @@ class ElasticSearch extends Module
             return array();
         }
 
-        return $result['hits']['hits'][0]['_source'];
+        return $this->getFirstItemFromResult($result);
     }
 
     public function getHosts()
@@ -134,5 +134,14 @@ class ElasticSearch extends Module
     private function isEmptyResult($result)
     {
         return empty($result['hits']['hits']);
+    }
+
+    /**
+     * @param $result
+     * @return mixed
+     */
+    private function getFirstItemFromResult($result)
+    {
+        return $result['hits']['hits'][0]['_source'];
     }
 }
