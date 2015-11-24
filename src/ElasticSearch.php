@@ -122,11 +122,6 @@ class ElasticSearch extends Module
         return $this->getFirstItemFromResult($result);
     }
 
-    public function getHosts()
-    {
-        return $this->config['hosts'];
-    }
-
     /**
      * @param $result
      * @return bool
@@ -143,5 +138,10 @@ class ElasticSearch extends Module
     private function getFirstItemFromResult($result)
     {
         return $result['hits']['hits'][0]['_source'];
+    }
+
+    public function getHosts()
+    {
+        return $this->config['hosts'];
     }
 }
