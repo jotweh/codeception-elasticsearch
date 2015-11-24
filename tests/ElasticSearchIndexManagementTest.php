@@ -20,7 +20,7 @@ class ElasticSearchIndexManagementTest extends ElasticSearchTestCase
     /**
      * @test
      */
-    public function createIndexInElasticsearchShouldCallIndicesCreateOnClientWithIndexName()
+    public function createIndexInElasticsearchShouldCallCreateOnClientIndicesWithIndexName()
     {
         $this->module->createIndexInElasticsearch('index-name');
         $this->indicesNamespace->shouldHaveReceived('create')->with(m::subset(['index' => 'index-name']));
