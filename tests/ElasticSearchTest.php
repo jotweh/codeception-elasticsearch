@@ -59,7 +59,7 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function seeItemExistsInElasticsearchShouldPassIndexNameToClient()
+    public function seeItemExistsInElasticsearchShouldCallExistsWithIndexNameOnClient()
     {
         $module = new ElasticSearch($this->container, ['hosts' => []], $this->client);
         $module->seeItemExistsInElasticsearch('index-name', null, null);
