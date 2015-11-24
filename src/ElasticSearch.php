@@ -5,6 +5,7 @@
 
 namespace Codeception\Module;
 
+use Codeception\Lib\ModuleContainer;
 use Codeception\Module;
 use Elasticsearch\Client;
 
@@ -13,7 +14,7 @@ class ElasticSearch extends Module
     /** @var  \Elasticsearch\Client */
     private $elasticSearch;
 
-    public function __construct($config = null)
+    public function __construct(ModuleContainer $moduleContainer, $config = null)
     {
         // terminology: see = isXyz => true/false, have = create, grab = get => data
 
@@ -26,7 +27,7 @@ class ElasticSearch extends Module
         }
         $this->config = (array)$config;
 
-        parent::__construct();
+        parent::__construct($moduleContainer);
     }
 
     public function _initialize()
