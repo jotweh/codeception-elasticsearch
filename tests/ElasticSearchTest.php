@@ -52,6 +52,7 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
      * @test
      * @expectedException \Exception
      * @expectedExceptionMessage Could not resolve host: test.3.1415.nonexistent-host.com
+     * @fixme Find a way to test this without having to rely on an exception from across the boundary
      */
     public function initializeShouldCreateClientWithConfiguredHostsIfNoClientIsPassedToConstructor()
     {
