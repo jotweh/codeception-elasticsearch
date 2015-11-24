@@ -134,6 +134,17 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($item);
     }
 
+    /**
+     * @test
+     */
+    public function grabAnItemFromElasticsearchShouldReturnFirstSourceArrayIfThereIsAHits()
+    {
+        $expectedItem = ['apples' => 1, 'oranges' => 2];
+        $this->client->shouldReceive('search')->andReturn(['hits' => ['hits' => [['_source' => $expectedItem]]]]);
+        $actualItem = $this->module->grabAnItemFromElasticsearch(null, null, null);
+        $this->assertEquals($expectedItem, $actualItem);
+    }
+
     public function setUp()
     {
         /** @var ModuleContainer container */
