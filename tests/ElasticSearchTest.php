@@ -26,4 +26,15 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
         $container = m::mock('\Codeception\Lib\ModuleContainer');
         new ElasticSearch($container, null);
     }
+
+    /**
+     * @test
+     * @expectedException \Exception
+     */
+    public function shouldNotInstantiateWithoutHostsArrayInConfigArray()
+    {
+        /** @var ModuleContainer | m\Mock $container */
+        $container = m::mock('\Codeception\Lib\ModuleContainer');
+        new ElasticSearch($container, ['hosts' => null]);
+    }
 }
