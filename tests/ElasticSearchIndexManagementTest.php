@@ -35,11 +35,40 @@ class ElasticSearchIndexManagementTest extends ElasticSearchTestCase
         $this->indicesNamespace->shouldHaveReceived('delete')->with(m::subset(['index' => 'index-name']));
     }
 
+    /**
+     * @test
+     */
+    public function seeIndexExistsInElasticsearchShouldCallExistsOnClientIndicesWithIndexName()
+    {
+        $this->module->seeIndexExistsInElasticsearch('index-name');
+        $this->indicesNamespace->shouldHaveReceived('exists')->with(m::subset(['index' => 'index-name']));
+    }
+
+    /**
+     * @test
+     */
+    public function seeIndexExistsInElasticsearchShouldDoNothingIfIndexExists()
+    {
+        $this->indicesNamespace->shouldReceive('exists')->andReturn(true);
+        $this->module->seeIndexExistsInElasticsearch('index-name');
+    }
+
+    /**
+     * @test
+     * @expectedException \PHPUnit_Framework_ExpectationFailedException
+     */
+    public function seeIndexExistsInElasticsearchShouldHaveFailingAssertionIfIndexDoesNot()
+    {
+        $this->indicesNamespace->shouldReceive('exists')->andReturn(false);
+        $this->module->seeIndexExistsInElasticsearch('index-name');
+    }
+
     public function setUp()
     {
         parent::setUp();
 
         $this->indicesNamespace = m::mock('\Elasticsearch\Namespaces\IndicesNamespace');
+        $this->indicesNamespace->shouldReceive('exists')->andReturn(true)->byDefault();
         $this->indicesNamespace->shouldIgnoreMissing();
         $this->client->shouldReceive('indices')->andReturn($this->indicesNamespace)->byDefault();
     }

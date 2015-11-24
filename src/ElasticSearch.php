@@ -160,4 +160,9 @@ class ElasticSearch extends Module
     {
         $this->elasticSearch->indices()->delete(['index' => $indexName]);
     }
+
+    public function seeIndexExistsInElasticsearch($indexName)
+    {
+        $this->assertTrue($this->elasticSearch->indices()->exists(['index' => $indexName]));
+    }
 }
