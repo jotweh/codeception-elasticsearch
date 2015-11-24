@@ -11,6 +11,7 @@ use Elasticsearch\Client;
 
 class ElasticSearch extends Module
 {
+    private $constructorConfiguration;
     /**
      * @var Client
      */
@@ -88,7 +89,8 @@ class ElasticSearch extends Module
      */
     private function configureModuleWithSettingsInArray($configArray)
     {
-        if (!isset($configArray['hosts'])) {
+        $this->constructorConfiguration = $configArray;
+        if (!isset($this->constructorConfiguration['hosts'])) {
             throw new \Exception('please configure hosts for ElasticSearch codeception module');
         }
 
