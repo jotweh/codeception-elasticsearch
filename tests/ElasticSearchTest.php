@@ -9,46 +9,11 @@
 namespace Tests\Codeception\Module;
 
 
-use Elasticsearch\Client;
 use Mockery as m;
-use Codeception\Lib\ModuleContainer;
 use Codeception\Module\ElasticSearch;
 
-class ElasticSearchTest extends \PHPUnit_Framework_TestCase
+class ElasticSearchTest extends ElasticSearchTestCase
 {
-    /**
-     * @var ElasticSearch
-     */
-    private $module;
-    /**
-     * @var Client | m\Mock
-     */
-    private $client;
-    /**
-     * @var ModuleContainer | m\Mock
-     */
-    private $container;
-
-    /**
-     * @test
-     * @expectedException \Exception
-     * @expectedExceptionMessage please configure hosts for ElasticSearch codeception module
-     */
-    public function shouldNotInstantiateWithoutConfigArray()
-    {
-        new ElasticSearch($this->container, null);
-    }
-
-    /**
-     * @test
-     */
-    public function shouldEncapsulateHostsInArrayIfNotEncapsulated()
-    {
-        $module = new ElasticSearch($this->container, ['hosts' => 'test.host.com']);
-        $hosts = $module->getHosts();
-        $this->assertEquals('test.host.com', $hosts[0]);
-    }
-
     /**
      * @test
      * @expectedException \Exception
@@ -144,19 +109,5 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
         $this->client->shouldReceive('search')->andReturn(['hits' => ['hits' => [['_source' => $expectedItem]]]]);
         $actualItem = $this->module->grabAnItemFromElasticsearch(null, null, null);
         $this->assertEquals($expectedItem, $actualItem);
-    }
-
-    public function setUp()
-    {
-        /** @var ModuleContainer container */
-        $this->container = m::mock('\Codeception\Lib\ModuleContainer');
-        $this->client = m::mock('\Elasticsearch\Client');
-        $this->client->shouldIgnoreMissing();
-        $this->module = new ElasticSearch($this->container, ['hosts' => []], $this->client);
-    }
-
-    public function tearDown()
-    {
-        m::close();
     }
 }
