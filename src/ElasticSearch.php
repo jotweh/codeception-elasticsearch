@@ -65,9 +65,7 @@ class ElasticSearch extends Module
 
     public function _initialize()
     {
-        if (is_null($this->elasticSearch)) {
-            $this->elasticSearch = new Client($this->config);
-        }
+        $this->buildElasticSearchClientIfNotInjected();
     }
 
     /**
@@ -118,5 +116,12 @@ class ElasticSearch extends Module
     public function getHosts()
     {
         return $this->config['hosts'];
+    }
+
+    private function buildElasticSearchClientIfNotInjected()
+    {
+        if (is_null($this->elasticSearch)) {
+            $this->elasticSearch = new Client($this->config);
+        }
     }
 }
