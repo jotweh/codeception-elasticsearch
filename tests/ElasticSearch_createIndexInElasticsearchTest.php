@@ -9,21 +9,29 @@
 namespace Tests\Codeception\Module;
 
 
+use Elasticsearch\Namespaces\IndicesNamespace;
 use Mockery as m;
 
 class ElasticSearch_createIndexInElasticsearchTest extends ElasticSearchTestCase
 {
+    /** @var IndicesNamespace | m\Mock */
+    private $indicesNamespace;
+
     /**
      * @test
      */
     public function createIndexInElasticsearchShouldCallIndicesCreateOnClientWithIndexName()
     {
-        $indicesNamespace = m::mock('\Elasticsearch\Namespaces\IndicesNamespace');
-        $indicesNamespace->shouldIgnoreMissing();
-        $this->client->shouldReceive('indices')->andReturn($indicesNamespace);
-
+        $this->client->shouldReceive('indices')->andReturn($this->indicesNamespace);
         $this->module->createIndexInElasticsearch('index-name');
+        $this->indicesNamespace->shouldHaveReceived('create')->with(m::subset(['index' => 'index-name']));
+    }
 
-        $indicesNamespace->shouldHaveReceived('create')->with(m::subset(['index' => 'index-name']));
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->indicesNamespace = m::mock('\Elasticsearch\Namespaces\IndicesNamespace');
+        $this->indicesNamespace->shouldIgnoreMissing();
     }
 }
