@@ -20,7 +20,7 @@ class ElasticSearch extends Module
     {
         $this->setModuleConfiguration($config);
         $this->sanitizeModuleConfiguration();
-        $this->setElasticSearchClientIfInjected($client);
+        $this->setElasticSearchClient($client);
 
         parent::__construct($moduleContainer);
     }
@@ -56,11 +56,9 @@ class ElasticSearch extends Module
     /**
      * @param Client $client
      */
-    private function setElasticSearchClientIfInjected($client)
+    private function setElasticSearchClient($client)
     {
-        if (!is_null($client)) {
-            $this->elasticSearch = $client;
-        }
+        $this->elasticSearch = $client;
     }
 
     public function _initialize()
