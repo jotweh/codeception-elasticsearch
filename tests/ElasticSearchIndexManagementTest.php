@@ -63,6 +63,25 @@ class ElasticSearchIndexManagementTest extends ElasticSearchTestCase
         $this->module->seeIndexExistsInElasticsearch('index-name');
     }
 
+    /**
+     * @test
+     */
+    public function dontSeeIndexExistsInElasticsearchShouldDoNothingIfIndexDoesNotExist()
+    {
+        $this->indicesNamespace->shouldReceive('exists')->andReturn(false);
+        $this->module->dontSeeIndexExistsInElasticsearch('index-name');
+    }
+
+    /**
+     * @test
+     * @expectedException \PHPUnit_Framework_ExpectationFailedException
+     */
+    public function dontSeeIndexExistsInElasticsearchShouldHaveFailingAssertionIfIndexExists()
+    {
+        $this->indicesNamespace->shouldReceive('exists')->andReturn(true);
+        $this->module->dontSeeIndexExistsInElasticsearch('index-name');
+    }
+
     public function setUp()
     {
         parent::setUp();

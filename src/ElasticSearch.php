@@ -165,4 +165,9 @@ class ElasticSearch extends Module
     {
         $this->assertTrue($this->elasticSearch->indices()->exists(['index' => $indexName]));
     }
+
+    public function dontSeeIndexExistsInElasticsearch($indexName)
+    {
+        $this->assertFalse($this->elasticSearch->indices()->exists(['index' => $indexName]));
+    }
 }
