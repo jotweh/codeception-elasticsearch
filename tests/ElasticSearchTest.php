@@ -16,15 +16,18 @@ use Codeception\Module\ElasticSearch;
 class ElasticSearchTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var ModuleContainer | m\Mock
+     */
+    private $container;
+
+    /**
      * @test
      * @expectedException \Exception
      * @expectedExceptionMessage please configure hosts for ElasticSearch codeception module
      */
     public function shouldNotInstantiateWithoutConfigArray()
     {
-        /** @var ModuleContainer | m\Mock $container */
-        $container = m::mock('\Codeception\Lib\ModuleContainer');
-        new ElasticSearch($container, null);
+        new ElasticSearch($this->container, null);
     }
 
     /**
@@ -33,8 +36,16 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotInstantiateWithoutHostsArrayInConfigArray()
     {
-        /** @var ModuleContainer | m\Mock $container */
-        $container = m::mock('\Codeception\Lib\ModuleContainer');
-        new ElasticSearch($container, ['hosts' => null]);
+        new ElasticSearch($this->container, ['hosts' => null]);
+    }
+
+    public function setUp()
+    {
+        $this->container = m::mock('\Codeception\Lib\ModuleContainer');
+    }
+
+    public function tearDown()
+    {
+        m::close();
     }
 }
