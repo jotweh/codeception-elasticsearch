@@ -68,6 +68,13 @@ class ElasticSearch extends Module
         $this->buildElasticSearchClientIfNotInjected();
     }
 
+    private function buildElasticSearchClientIfNotInjected()
+    {
+        if (is_null($this->elasticSearch)) {
+            $this->elasticSearch = new Client($this->config);
+        }
+    }
+
     /**
      * check if an item exists in a given index
      *
@@ -116,12 +123,5 @@ class ElasticSearch extends Module
     public function getHosts()
     {
         return $this->config['hosts'];
-    }
-
-    private function buildElasticSearchClientIfNotInjected()
-    {
-        if (is_null($this->elasticSearch)) {
-            $this->elasticSearch = new Client($this->config);
-        }
     }
 }
