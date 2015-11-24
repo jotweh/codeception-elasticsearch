@@ -89,8 +89,7 @@ class ElasticSearch extends Module
     private function configureModuleWithSettingsInArray($configArray)
     {
         $this->config = $configArray;
-        $this->guardThatConstructorConfigurationHasHosts();
-
+        $this->guardThatConfigurationHasHosts();
         $this->wrapConfiguredHostsInArrayIfNeeded();
     }
 
@@ -104,7 +103,7 @@ class ElasticSearch extends Module
         }
     }
 
-    private function guardThatConstructorConfigurationHasHosts()
+    private function guardThatConfigurationHasHosts()
     {
         if (!isset($this->config['hosts'])) {
             throw new \Exception('please configure hosts for ElasticSearch codeception module');
