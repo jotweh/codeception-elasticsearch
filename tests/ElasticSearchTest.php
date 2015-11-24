@@ -10,23 +10,9 @@ namespace Tests\Codeception\Module;
 
 
 use Mockery as m;
-use Codeception\Module\ElasticSearch;
 
 class ElasticSearchTest extends ElasticSearchTestCase
 {
-    /**
-     * @test
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not resolve host: test.3.1415.nonexistent-host.com
-     * @fixme Find a way to test this without having to rely on an exception from across the boundary
-     */
-    public function initializeShouldCreateClientWithConfiguredHostsIfNoClientIsPassedToConstructor()
-    {
-        $module = new ElasticSearch($this->container, ['hosts' => ['test.3.1415.nonexistent-host.com']]);
-        $module->_initialize();
-        $module->seeItemExistsInElasticsearch('any-indexname', 'any-type', 'any-id');
-    }
-
     /**
      * @test
      */
