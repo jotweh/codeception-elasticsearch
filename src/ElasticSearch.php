@@ -38,7 +38,7 @@ class ElasticSearch extends Module
 
     public function _initialize()
     {
-        if (!is_null($this->$this->elasticSearch)) {
+        if (is_null($this->elasticSearch)) {
             $this->elasticSearch = new Client($this->config);
         }
     }
