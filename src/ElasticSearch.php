@@ -69,6 +69,19 @@ class ElasticSearch extends Module
     }
 
     /**
+     * @return bool
+     */
+    private function doesNotHaveElasticSearchClient()
+    {
+        return is_null($this->elasticSearch);
+    }
+
+    private function buildElasticSearchClient()
+    {
+        $this->elasticSearch = new Client($this->config);
+    }
+
+    /**
      * check if an item exists in a given index
      *
      * @param string $index index name
@@ -136,18 +149,5 @@ class ElasticSearch extends Module
     public function getHosts()
     {
         return $this->config['hosts'];
-    }
-
-    /**
-     * @return bool
-     */
-    private function doesNotHaveElasticSearchClient()
-    {
-        return is_null($this->elasticSearch);
-    }
-
-    private function buildElasticSearchClient()
-    {
-        $this->elasticSearch = new Client($this->config);
     }
 }
