@@ -114,6 +114,15 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
         $this->client->shouldHaveReceived('search')->with(m::subset(['q' => 'something']));
     }
 
+    /**
+     * @test
+     */
+    public function grabAnItemFromElasticsearchShouldCallSearchWithSizeOneOnClient()
+    {
+        $this->module->grabAnItemFromElasticsearch(null, null, null);
+        $this->client->shouldHaveReceived('search')->with(m::subset(['size' => 1]));
+    }
+
     public function setUp()
     {
         /** @var ModuleContainer container */
