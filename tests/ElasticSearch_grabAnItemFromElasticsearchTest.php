@@ -11,7 +11,7 @@ namespace Tests\Codeception\Module;
 
 use Mockery as m;
 
-class ElasticSearchTest extends ElasticSearchTestCase
+class ElasticSearch_grabAnItemFromElasticsearchTest extends ElasticSearchTestCase
 {
     /**
      * @test
