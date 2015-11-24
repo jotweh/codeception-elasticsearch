@@ -18,14 +18,7 @@ class ElasticSearch extends Module
 
     public function __construct(ModuleContainer $moduleContainer, $config = null, Client $client = null)
     {
-        if (!isset($config['hosts'])) {
-            throw new \Exception('please configure hosts for ElasticSearch codeception module');
-        }
-
-        if (isset($config['hosts']) && !is_array($config['hosts'])) {
-            $config['hosts'] = array($config['hosts']);
-        }
-        $this->config = (array)$config;
+        $this->configureModuleWithSettingsInArray($config);
 
         if (!is_null($client)) {
             $this->elasticSearch = $client;
@@ -90,5 +83,21 @@ class ElasticSearch extends Module
     public function getHosts()
     {
         return $this->config['hosts'];
+    }
+
+    /**
+     * @param $configArray
+     * @throws \Exception
+     */
+    private function configureModuleWithSettingsInArray($configArray)
+    {
+        if (!isset($configArray['hosts'])) {
+            throw new \Exception('please configure hosts for ElasticSearch codeception module');
+        }
+
+        if (isset($configArray['hosts']) && !is_array($configArray['hosts'])) {
+            $configArray['hosts'] = array($configArray['hosts']);
+        }
+        $this->config = (array)$configArray;
     }
 }
