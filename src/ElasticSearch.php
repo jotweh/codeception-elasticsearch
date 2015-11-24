@@ -18,8 +18,6 @@ class ElasticSearch extends Module
 
     public function __construct(ModuleContainer $moduleContainer, $config = null, Client $client = null)
     {
-        // terminology: see = isXyz => true/false, have = create, grab = get => data
-
         if (!isset($config['hosts'])) {
             throw new \Exception('please configure hosts for ElasticSearch codeception module');
         }
