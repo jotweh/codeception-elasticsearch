@@ -105,6 +105,15 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
         $this->client->shouldHaveReceived('search')->with(m::subset(['type' => 'some-document-type']));
     }
 
+    /**
+     * @test
+     */
+    public function grabAnItemFromElasticsearchShouldCallSearchWithQueryStringOnClient()
+    {
+        $this->module->grabAnItemFromElasticsearch(null, null, 'something');
+        $this->client->shouldHaveReceived('search')->with(m::subset(['q' => 'something']));
+    }
+
     public function setUp()
     {
         /** @var ModuleContainer container */
