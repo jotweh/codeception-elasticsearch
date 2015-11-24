@@ -89,5 +89,8 @@ class ElasticSearch extends Module
             : array();
     }
 
-
+    public function getHosts()
+    {
+        return $this->config['hosts'];
+    }
 }

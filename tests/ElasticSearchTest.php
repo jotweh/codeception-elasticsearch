@@ -41,11 +41,12 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Exception
      */
-    public function shouldNotInstantiateWithoutHostsArrayInConfigArray()
+    public function shouldEncapsulateHostsInArrayIfNotEncapsulated()
     {
-        new ElasticSearch($this->container, ['hosts' => null]);
+        $module = new ElasticSearch($this->container, ['hosts' => 'test.host.com']);
+        $hosts = $module->getHosts();
+        $this->assertEquals('test.host.com', $hosts[0]);
     }
 
     /**
