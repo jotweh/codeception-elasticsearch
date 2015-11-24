@@ -123,6 +123,16 @@ class ElasticSearchTest extends \PHPUnit_Framework_TestCase
         $this->client->shouldHaveReceived('search')->with(m::subset(['size' => 1]));
     }
 
+    /**
+     * @test
+     */
+    public function grabAnItemFromElasticsearchShouldReturnEmptyArrayIfThereAreNoHits()
+    {
+        $this->client->shouldReceive('search')->andReturn(['hits' => ['hits' => []]]);
+        $item = $this->module->grabAnItemFromElasticsearch(null, null, null);
+        $this->assertEmpty($item);
+    }
+
     public function setUp()
     {
         /** @var ModuleContainer container */
