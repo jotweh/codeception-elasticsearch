@@ -170,4 +170,19 @@ class ElasticSearch extends Module
     {
         $this->assertFalse($this->elasticSearch->indices()->exists(['index' => $indexName]));
     }
+
+    public function indexAnItemInElasticSearch($indexName, $documentType, $documentBody, $id = null)
+    {
+        $params = [
+            'index' => $indexName,
+            'type' => $documentType,
+            'body' => $documentBody
+        ];
+
+        if (!is_null($id)) {
+            $params['id'] = $id;
+        }
+
+        $this->elasticSearch->index($params);
+    }
 }
