@@ -5,38 +5,79 @@
 
 namespace Codeception\Module;
 
+use Codeception\Lib\ModuleContainer;
 use Codeception\Module;
 use Elasticsearch\Client;
 
 class ElasticSearch extends Module
 {
-    /** @var  \Elasticsearch\Client */
-    private $elasticSearch;
+    /**
+     * @var Client
+     */
+    private $elasticSearch = null;
 
-    public function __construct($config = null)
+    public function __construct(ModuleContainer $moduleContainer, $config = null, Client $client = null)
     {
-        // terminology: see = isXyz => true/false, have = create, grab = get => data
+        $this->setModuleConfiguration($config);
+        $this->sanitizeModuleConfiguration();
+        $this->setElasticSearchClient($client);
 
-        if (!isset($config['hosts'])) {
+        parent::__construct($moduleContainer);
+    }
+
+    /**
+     * @param $config
+     */
+    private function setModuleConfiguration($config)
+    {
+        $this->config = $config;
+    }
+
+    private function sanitizeModuleConfiguration()
+    {
+        $this->guardThatConfigurationHasHosts();
+        $this->wrapConfiguredHostsInArrayIfNeeded();
+    }
+
+    private function guardThatConfigurationHasHosts()
+    {
+        if (!isset($this->config['hosts'])) {
             throw new \Exception('please configure hosts for ElasticSearch codeception module');
         }
+    }
 
-        if (isset($config['hosts']) && !is_array($config['hosts'])) {
-            $config['hosts'] = array($config['hosts']);
+    private function wrapConfiguredHostsInArrayIfNeeded()
+    {
+        if (!is_array($this->config['hosts'])) {
+            $this->config['hosts'] = array($this->config['hosts']);
         }
-        $this->config = (array)$config;
+    }
 
-        parent::__construct();
+    /**
+     * @param Client $client
+     */
+    private function setElasticSearchClient($client)
+    {
+        $this->elasticSearch = $client;
     }
 
     public function _initialize()
     {
-        /*
-         * elastic search config
-         * hosts - array of ES hosts
-         * dic - ES dictionary
-         */
+        if ($this->doesNotHaveElasticSearchClient()) {
+            $this->buildElasticSearchClient();
+        }
+    }
 
+    /**
+     * @return bool
+     */
+    private function doesNotHaveElasticSearchClient()
+    {
+        return is_null($this->elasticSearch);
+    }
+
+    private function buildElasticSearchClient()
+    {
         $this->elasticSearch = new Client($this->config);
     }
 
@@ -49,7 +90,7 @@ class ElasticSearch extends Module
      *
      * @return array
      */
-    public function seeItemExistsInElasticsearch($index, $type, $id)
+    public function seeItemExistsInElasticSearch($index, $type, $id)
     {
         return $this->elasticSearch->exists(
             [
@@ -60,7 +101,6 @@ class ElasticSearch extends Module
         );
     }
 
-
     /**
      * grab an item from search index
      *
@@ -70,7 +110,7 @@ class ElasticSearch extends Module
      *
      * @return array
      */
-    public function grabAnItemFromElasticsearch($index = null, $type = null, $queryString = '*')
+    public function grabAnItemFromElasticSearch($index = null, $type = null, $queryString = '*')
     {
         $result = $this->elasticSearch->search(
             [
@@ -81,10 +121,68 @@ class ElasticSearch extends Module
             ]
         );
 
-        return !empty($result['hits']['hits'])
-            ? $result['hits']['hits'][0]['_source']
-            : array();
+        if ($this->isEmptyResult($result)) {
+            return array();
+        }
+
+        return $this->getFirstItemFromResult($result);
     }
 
+    /**
+     * @param $result
+     * @return bool
+     */
+    private function isEmptyResult($result)
+    {
+        return empty($result['hits']['hits']);
+    }
 
+    /**
+     * @param $result
+     * @return mixed
+     */
+    private function getFirstItemFromResult($result)
+    {
+        return $result['hits']['hits'][0]['_source'];
+    }
+
+    public function getHosts()
+    {
+        return $this->config['hosts'];
+    }
+
+    public function createIndexInElasticSearch($indexName)
+    {
+        $this->elasticSearch->indices()->create(['index' => $indexName]);
+    }
+
+    public function deleteIndexInElasticSearch($indexName)
+    {
+        $this->elasticSearch->indices()->delete(['index' => $indexName]);
+    }
+
+    public function seeIndexExistsInElasticSearch($indexName)
+    {
+        $this->assertTrue($this->elasticSearch->indices()->exists(['index' => $indexName]));
+    }
+
+    public function dontSeeIndexExistsInElasticSearch($indexName)
+    {
+        $this->assertFalse($this->elasticSearch->indices()->exists(['index' => $indexName]));
+    }
+
+    public function indexAnItemInElasticSearch($indexName, $documentType, $documentBody, $id = null)
+    {
+        $params = [
+            'index' => $indexName,
+            'type' => $documentType,
+            'body' => $documentBody
+        ];
+
+        if (!is_null($id)) {
+            $params['id'] = $id;
+        }
+
+        $this->elasticSearch->index($params);
+    }
 }
